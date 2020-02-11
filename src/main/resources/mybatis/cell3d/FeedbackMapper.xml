@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.feedback//DTD Mapper 3.0//EN"
+        "http://mybatis.feedback/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zkcm.szcp.project.cell3d.mapper.FeedbackMapper">
+    <resultMap type="com.zkcm.szcp.project.cell3d.domain.Feedback" id="FeedbackResult">
+        <id property="id" column="id"/>
+        <result property="content" column="content"/>
+        <result property="dealFlag" column="deal_flag"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+    <sql id="selectFeedbackVo">
+        select id,content,deal_flag,del_flag,create_by,create_time
+        from feedback
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="sqlWhereSearch">
+        <where>
+            del_flag = 'N'
+            <if test="id !=null">
+                and id = #{id}
+            </if>
+            <if test="createBy !=null and createBy != ''">
+                and create_by = #{createBy}
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectFeedback" resultMap="FeedbackResult">
+        <include refid="selectFeedbackVo"/>
+        <include refid="sqlWhereSearch"/>
+    </select>
+
+    <select id="selectFeedbackList" resultMap="FeedbackResult">
+        <include refid="selectFeedbackVo"/>
+        <where>
+            del_flag = 'N'
+            <if test="createBy !=null and createBy != ''">
+                and create_by = #{createBy}
+            </if>
+            <choose>
+                <when test="sort != null and sort.trim() != ''">
+                    order by ${sort} ${order}
+                </when>
+                <otherwise>
+                    order by id desc
+                </otherwise>
+            </choose>
+            <if test="offset != null and limit != null">
+                limit #{offset}, #{limit}
+            </if>
+        </where>
+    </select>
+    <select id="selectFeedbackDaysList" resultMap="FeedbackResult">
+        <include refid="selectFeedbackVo"/>
+        <where>
+            deal_flag = 'N'
+        </where>
+    </select>
+
+
+    <insert id="insertFeedback" useGeneratedKeys="true" keyProperty="id">
+        insert into feedback (
+        <if test="content != null and content != '' ">content,</if>
+        <if test="dealFlag != null and dealFlag != '' ">deal_flag,</if>
+        <if test="delFlag != null and delFlag != '' ">del_flag,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="content != null and content != '' ">#{content},</if>
+        <if test="dealFlag != null and dealFlag != '' ">#{dealFlag},</if>
+        <if test="delFlag != null and delFlag != ''">#{delFlag},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
+        )
+    </insert>
+
+    <update id="updateFeedback">
+        update feedback
+        <set>
+            <if test="content != null and content != '' ">content = #{content},</if>
+            <if test="delFlag != null and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="dealFlag != null and dealFlag != ''">deal_flag = #{dealFlag}</if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

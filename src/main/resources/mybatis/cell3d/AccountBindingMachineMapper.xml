@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zkcm.szcp.project.cell3d.mapper.AccountBindingMachineMapper">
+    <resultMap type="com.zkcm.szcp.project.cell3d.domain.AccountBindingMachine" id="AccountBindingMachineResult">
+        <id property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="machineName" column="machine_name"/>
+        <result property="machineIp" column="machine_ip"/>
+        <result property="createTime" column="create_time"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+
+    <select id="selectAccountBindingMachineList" resultMap="AccountBindingMachineResult">
+        select
+        `id`,`code`,`machine_name`,`machine_ip`,`create_time`,`del_flag`
+        from account_binding_machine
+        <where>
+            <if test="id != null and id != ''">and id = #{id}</if>
+            <if test="code != null and code != ''">and code = #{code}</if>
+            <if test="machineName != null and machineName != ''">and machine_name = #{machineName}</if>
+            <if test="machineIp != null and machineIp != ''">and machine_ip = #{machineIp}</if>
+            <if test="createTime != null and createTime != ''">and create_time = #{createTime}</if>
+            <if test="delFlag != null and delFlag != ''">and del_flag = #{delFlag}</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="getAccountBindingMachineById"
+            resultType="com.zkcm.szcp.project.cell3d.domain.AccountBindingMachine">
+        select
+        `id`,`code`,`machine_name`,`machine_ip`,`create_time`,`del_flag`
+        from account_binding_machine
+        where id = #{id}
+    </select>
+
+    <insert id="insertAccountBindingMachine" parameterType="com.zkcm.szcp.project.cell3d.domain.OrgAccount"
+            useGeneratedKeys="true"
+            keyProperty="id">
+		insert into account_binding_machine
+		(
+			`code`,
+			`machine_name`,
+			`machine_ip`,
+			`create_time`,
+			`del_flag`
+		)
+		values
+		(
+			#{code},
+			#{machineName},
+			#{machineIp},
+			#{createTime},
+			#{delFlag}
+		)
+	</insert>
+
+    <update id="updateAccountBindingMachine" parameterType="com.zkcm.szcp.project.cell3d.domain.AccountBindingMachine">
+        update account_binding_machine
+        <set>
+            <if test="code != null">`code` = #{code},</if>
+            <if test="machineName != null">`machine_name` = #{machineName},</if>
+            <if test="machineIp != null">`machine_ip` = #{machineIp},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="delFlag != null">`del_flag` = #{delFlag}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+</mapper>

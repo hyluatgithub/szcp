@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zkcm.szcp.project.cell3d.mapper.RenewLogMapper">
+    <resultMap type="com.zkcm.szcp.project.cell3d.domain.RenewLog" id="RenewLogResult">
+        <id property="id" column="id"/>
+        <result property="type" column="type"/>
+        <result property="orgCode" column="org_code"/>
+        <result property="classCode" column="class_code"/>
+        <result property="userId" column="user_id"/>
+        <result property="renewEndTime" column="renew_end_time"/>
+        <result property="renewMaxActivate" column="renew_max_activate"/>
+        <result property="maxActivate" column="max_activate"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+    <sql id="selectRenewLogVo">
+		select id,`type`,orgCode,classCode,userId,renew_end_time,renew_max_activate,max_activate,create_time
+		from renew_log
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="sqlWhereSearch">
+        <where>
+            del_flag = 'N'
+            <if test="id !=null">
+                and id = #{id}
+            </if>
+            <if test="businessCode !=null and businessCode != ''">
+                and business_code = #{businessCode}
+            </if>
+        </where>
+    </sql>
+    <select id="selectRenewLog" resultMap="RenewLogResult">
+        <include refid="selectRenewLogVo"/>
+        <include refid="sqlWhereSearch"/>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="selectRenewLogList" resultMap="RenewLogResult">
+        <include refid="selectRenewLogVo"/>
+        <include refid="sqlWhereSearch"/>
+    </select>
+
+    <insert id="insertRenewLog" useGeneratedKeys="true" keyProperty="id">
+        insert into renew_log (
+        <if test="type != null and type != '' ">`type`,</if>
+        <if test="orgCode != null and orgCode != '' ">org_code,</if>
+        <if test="classCode != null and classCode != '' ">class_code,</if>
+        <if test="userId != null and userId != '' ">user_id,</if>
+        <if test="renewTime != null and renewTime != '' ">renew_time,</if>
+        <if test="renewEndTime != null and renewEndTime != '' ">renew_end_time,</if>
+        <if test="renewMaxActivate != null and renewMaxActivate != '' ">renew_max_activate,</if>
+        <if test="maxActivate != null and maxActivate != ''">max_activate,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="delFlag != null and delFlag != ''">del_flag,</if>
+        create_time
+        )values(
+        <if test="type != null and type != '' ">#{type},</if>
+        <if test="orgCode != null and orgCode != '' ">#{orgCode},</if>
+        <if test="classCode != null and classCode != '' ">#{classCode},</if>
+        <if test="userId != null and userId != '' ">#{userId},</if>
+        <if test="renewTime != null and renewTime != '' ">#{renewTime},</if>
+        <if test="renewEndTime != null and renewEndTime != '' ">#{renewEndTime},</if>
+        <if test="renewMaxActivate != null and renewMaxActivate != '' ">#{renewMaxActivate},</if>
+        <if test="maxActivate != null and maxActivate != ''">#{maxActivate},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="delFlag != null and delFlag != ''">#{delFlag},</if>
+        sysdate()
+        )
+    </insert>
+</mapper>

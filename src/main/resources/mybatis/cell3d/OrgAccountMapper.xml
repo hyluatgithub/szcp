@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zkcm.szcp.project.cell3d.mapper.OrgAccountMapper">
+    <resultMap type="com.zkcm.szcp.project.cell3d.domain.OrgAccount" id="OrgAccountResult">
+        <id property="id" column="id"/>
+        <result property="userName" column="user_name"/>
+        <result property="userMobile" column="user_mobile"/>
+        <result property="userPwd" column="user_pwd"/>
+        <result property="userEmail" column="user_email"/>
+        <result property="activateFlag" column="activate_flag"/>
+        <result property="orgCode" column="org_code"/>
+        <result property="classCode" column="class_code"/>
+        <result property="code" column="code"/>
+        <result property="activateInvalidTime" column="activate_invalid_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+
+    <select id="getOrgAccountById" resultMap="OrgAccountResult">
+		select `id`,`user_name`,`user_mobile`,`user_pwd`,`user_email`,`activate_flag`,`org_code`,`class_code`,`code`,`activate_invalid_time`,`create_time`,`del_flag` from org_account where id = #{value}
+	</select>
+
+    <select id="getOrgAccount" resultMap="OrgAccountResult">
+        select
+        `id`,`user_name`,`user_mobile`,`user_pwd`,`user_email`,`activate_flag`,`org_code`,`class_code`,`code`,`activate_invalid_time`,`create_time`,`del_flag`
+        from org_account
+        <where>
+            del_flag = 'N'
+            <if test="id != null and id != ''">and id = #{id}</if>
+            <if test="userName != null and userName != ''">and user_name = #{userName}</if>
+            <if test="userMobile != null and userMobile != ''">and user_mobile = #{userMobile}</if>
+            <if test="userPwd != null and userPwd != ''">and user_pwd = #{userPwd}</if>
+            <if test="userEmail != null and userEmail != ''">and user_email = #{userEmail}</if>
+            <if test="activateFlag != null and activateFlag != ''">and activate_flag = #{activateFlag}</if>
+            <if test="orgCode != null and orgCode != ''">and org_code = #{orgCode}</if>
+            <if test="classCode != null and classCode != ''">and class_code = #{classCode}</if>
+            <if test="code != null and code != ''">and code = #{code}</if>
+            <if test="activateInvalidTime != null and activateInvalidTime != ''">and activate_invalid_time =
+                #{activateInvalidTime}
+            </if>
+            <if test="createTime != null and createTime != ''">and create_time = #{createTime}</if>
+        </where>
+    </select>
+
+    <select id="selectOrgAccountList" resultMap="OrgAccountResult">
+        select
+        `id`,`user_name`,`user_mobile`,`user_pwd`,`user_email`,`activate_flag`,`org_code`,`class_code`,`code`,`activate_invalid_time`,`create_time`,`del_flag`
+        from org_account
+        <where>
+            <if test="id != null and id != ''">and id = #{id}</if>
+            <if test="userName != null and userName != ''">and user_name = #{userName}</if>
+            <if test="userMobile != null and userMobile != ''">and user_mobile = #{userMobile}</if>
+            <if test="userPwd != null and userPwd != ''">and user_pwd = #{userPwd}</if>
+            <if test="userEmail != null and userEmail != ''">and user_email = #{userEmail}</if>
+            <if test="activateFlag != null and activateFlag != ''">and activate_flag = #{activateFlag}</if>
+            <if test="orgCode != null and orgCode != ''">and org_code = #{orgCode}</if>
+            <if test="classCode != null and classCode != ''">and class_code = #{classCode}</if>
+            <if test="code != null and code != ''">and code = #{code}</if>
+            <if test="activateInvalidTime != null and activateInvalidTime != ''">and activate_invalid_time =
+                #{activateInvalidTime}
+            </if>
+            <if test="createTime != null and createTime != ''">and create_time = #{createTime}</if>
+            <if test="delFlag != null and delFlag != ''">and del_flag = #{delFlag}</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="checkPhoneUnique" resultType="java.lang.Integer">
+        select count(*) from org_account where user_mobile = #{userMobile} and del_flag = 'N'
+    </select>
+
+    <insert id="insertOrgAccount" parameterType="com.zkcm.szcp.project.cell3d.domain.OrgAccount" useGeneratedKeys="true"
+            keyProperty="id">
+		insert into org_account
+		(
+			`id`,
+			`user_name`,
+			`user_mobile`,
+			`user_pwd`,
+			`user_email`,
+			`activate_flag`,
+			`org_code`,
+			`class_code`,
+			`code`,
+			`activate_invalid_time`,
+			`create_time`,
+			`del_flag`
+		)
+		values
+		(
+			#{id},
+			#{userName},
+			#{userMobile},
+			#{userPwd},
+			#{userEmail},
+			#{activateFlag},
+			#{orgCode},
+			#{classCode},
+			#{code},
+			#{activateInvalidTime},
+			#{createTime},
+			#{delFlag}
+		)
+	</insert>
+
+    <update id="updateOrgAccount" parameterType="com.zkcm.szcp.project.cell3d.domain.OrgAccount">
+        update org_account
+        <set>
+            <if test="userName != null">`user_name` = #{userName},</if>
+            <if test="userMobile != null">`user_mobile` = #{userMobile},</if>
+            <if test="userPwd != null">`user_pwd` = #{userPwd},</if>
+            <if test="userEmail != null">`user_email` = #{userEmail},</if>
+            <if test="activateFlag != null">`activate_flag` = #{activateFlag},</if>
+            <if test="orgCode != null">`org_code` = #{orgCode},</if>
+            <if test="classCode != null">`class_code` = #{classCode},</if>
+            <if test="code != null">`code` = #{code},</if>
+            <if test="activateInvalidTime != null">`activate_invalid_time` = #{activateInvalidTime},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="delFlag != null">`del_flag` = #{delFlag}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="deleteOrgAccountById">
+		update org_account set del_flag = 'Y' where id = #{value}
+	</update>
+
+    <delete id="batchDeleteOrgAccount">
+        update org_account set del_flag = 'Y' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

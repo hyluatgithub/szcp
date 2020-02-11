@@ -1,0 +1,6 @@
+Application Version: ${szcp.version}
+Spring Boot Version: ${spring-boot.version}
+
+
+
+

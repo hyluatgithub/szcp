@@ -31,7 +31,10 @@ public class MobileAuthenticationFilter extends HandlerInterceptorAdapter {
                 || path.matches("/mobile/account/loginWithoutPwd")
                 || path.matches("/mobile/account/login")
                 || path.matches("/mobile/account/resetPwd")
-                || path.matches("/mobile/account/sendMobileInfo")) {
+                || path.matches("/mobile/account/sendMobileInfo")
+                || path.matches("/mobile/animal/activationKey")
+                || path.matches("/mobile/animal/verifyKey")
+                || path.matches("/mobile/animal/now")) {
             //app的注册 免密登录 登录 忘记免密 发送验证码 免权限校验
             return true;
         } else {
